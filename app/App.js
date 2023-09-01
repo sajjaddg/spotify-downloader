@@ -5,15 +5,15 @@ import {persistor, store} from "./redux/store";
 import HomeScreen from "./featuers/home/HomeScreen";
 
 export default function App() {
-    return (
-        <>
-            <StoreProvider {...{store}}>
-                <PersistGate loading={null} {...{persistor}}>
-                    <HomeScreen/>
-                    <StatusBar style="light"/>
-                </PersistGate>
-            </StoreProvider>
-        </>
-    );
+  return (
+    <>
+        <StoreProvider {...{store}}>
+          <PersistGate loading={null} {...{persistor}}>
+            <HomeScreen/>
+            <StatusBar style="light"/>
+          </PersistGate>
+        </StoreProvider>
+    </>
+  );
 }
 
