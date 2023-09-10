@@ -8,8 +8,7 @@ import useAppAlbum from "../hooks/useAppAlbum";
 
 function AppAlbum({data}) {
 
-  const {image, name, nameArtists, numberOfSongs,items} = useAppAlbum(data?.album ?? data)
-
+  const {image, name, nameArtists, numberOfSongs, items} = useAppAlbum(data?.album ?? data)
 
   return (
     <View style={{paddingTop: 30}}>

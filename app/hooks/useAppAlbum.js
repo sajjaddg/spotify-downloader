@@ -12,7 +12,7 @@ function UseAppAlbum(album) {
   const image = useMemo(() => images ? images[0]?.url : '', [images])
   const nameArtists = useMemo(() => artists?.map(it => it.name).join(', '), [artists])
   const numberOfSongs = useMemo(() => total_tracks < 2 ? `${total_tracks} song` : `${total_tracks} songs`, [total_tracks])
-  const items = useMemo(() => tracks?.items.map(it=>({...it,images})) ?? [], [tracks])
+  const items = useMemo(() => tracks? tracks.items.map(it => ({...it, images})) : [{artists,images,name}], [tracks, image])
 
   return {
     image,

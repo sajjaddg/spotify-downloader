@@ -3,7 +3,7 @@ import {saveApi, setApiError, setApiLoading} from "../redux/api/apiSlice";
 import {batch} from "react-redux";
 
 export const isUndefined = v => v === null || typeof v === 'undefined'
-export const callApi = async (apiKey, action, conf = {}) => {
+export const callInfo = async (apiKey, action, conf = {}) => {
   const config = {
     fetchData: (data) => data?.data,
     isArray: false,

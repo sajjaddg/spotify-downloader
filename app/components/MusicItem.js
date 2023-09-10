@@ -10,7 +10,6 @@ export const MusicRender = props => <MusicItem {...{...props}} />
 
 function MusicItem({index, item}) {
   console.log(item)
-
   const {
     image,
     name,
