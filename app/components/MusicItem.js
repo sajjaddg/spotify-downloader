@@ -1,5 +1,5 @@
 import React from "react";
-import {Image, View} from "react-native";
+import {Image, TouchableOpacity, View} from "react-native";
 import AppIcon from "./AppIcon";
 import AppText from "./AppText";
 import useAppAlbum from "../hooks/useAppAlbum";
@@ -9,11 +9,12 @@ export const MusicKeyExtractor = item => `Music_${item.id}`
 export const MusicRender = props => <MusicItem {...{...props}} />
 
 function MusicItem({index, item}) {
-  console.log(item)
   const {
     image,
     name,
     nameArtists,
+    onPressItem,
+    id
   } = useAppAlbum(item)
 
   return (
@@ -32,7 +33,11 @@ function MusicItem({index, item}) {
           </AppText>
         </View>
       </View>
-      <AppIcon size={24} name='download'/>
+      <TouchableOpacity onPress={() => {
+        onPressItem(id)
+      }}>
+        <AppIcon size={24} name='download'/>
+      </TouchableOpacity>
     </View>
   )
 }

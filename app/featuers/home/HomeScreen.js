@@ -2,6 +2,7 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 import {useDispatch} from "react-redux";
 import {StyleSheet, View} from "react-native";
 import Animated, {runOnJS, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated';
+import * as FileSystem from 'expo-file-system';
 import {callGetAlbumById, callGetPlayListById, callGetTrackById} from "../../redux/actions/apiActions";
 import {selectApiGetAlbumById, selectApiGetTrackById} from "../../redux/api/apiSelector";
 import {useShallowSelector} from "../../utils/store-helper";
@@ -52,8 +53,19 @@ function HomeScreen(props) {
     return Object.keys(it).length
   }, [])
 
+  const onPressItem = useCallback(async link => {
+    console.log(link)
+    const data = await getDownloadLink(link)
+    const name = data.youtubeVideo.title.replace(/\s/g, '')
+    const uri = await downloadFromUrl(data.youtubeVideo.audio[0].url, name)
+  }, [])
+
   const loading = useMemo(() => loadingAlbum && loadingTruck, [loadingAlbum, loadingTruck])
-  const data = useMemo(() => hasData(dataAlbum) ? dataAlbum : dataTruck , [hasData, dataAlbum, dataTruck])
+  const data = useMemo(() => hasData(dataAlbum) ? {...dataAlbum, onPressItem} : {
+    ...dataTruck.album,
+    link,
+    onPressItem
+  }, [hasData, dataAlbum, onPressItem, dataTruck.album, link])
   const info = useMemo(() => extractSpotifyInfo(link), [link])
 
   const onPress = useCallback(() => {
@@ -81,10 +93,24 @@ function HomeScreen(props) {
   }, [info?.type])
 
 
-  const x = async () => {
+  const downloadFromUrl = async (link, name) => {
+    console.log('start download')
+    console.log(link, name)
+    const result = await FileSystem.downloadAsync(
+      link,
+      FileSystem.documentDirectory + name + '.mp3'
+    );
+    console.log(result)
+
+  };
+  const getDownloadLink = async truckUrl => {
     const z = useDownloaderApi()
-    const xx = await z.get('https://spotify-downloader-api.p.rapidapi.com/Home/GetSpotifyUserInfo', {params: {Tracklink: 'https://open.spotify.com/track/6R6BpMBFQrF7n2uEOxYmss?si=dae3f80f86934437'}})
-    console.log(xx)
+    try {
+      const {data} = await z.get('https://spotify-scraper.p.rapidapi.com/v1/track/download', {params: {track: truckUrl}})
+      return data
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   useEffect(() => {
@@ -149,7 +175,8 @@ const styles = StyleSheet.create({
   },
   data: {
     flex: 1,
-    marginTop: -450
+    marginTop: -400,
+    paddingBottom: 90
   }
 });
 
